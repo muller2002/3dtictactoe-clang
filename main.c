@@ -17,6 +17,7 @@ int main() {
   enum stones board[BOARDSIZE][BOARDSIZE][BOARDSIZE] = {
       0}; // Corresponding to x,y,z Coordinates
 
+  printBoard(board, PRINTMODE);
   return EXIT_SUCCESS;
 }
 
