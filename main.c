@@ -18,6 +18,29 @@ int main() {
       0}; // Corresponding to x,y,z Coordinates
 
   printBoard(board, PRINTMODE);
+
+  // simple Game logic:
+  enum stones activePlayer = PLAYER1;
+  while (evalWinner(board) == EMPTY) {
+    bool validInput = false;
+    size_t x = SIZE_MAX, y = SIZE_MAX, z = SIZE_MAX;
+    printf("Spieler %u ist am Zug. Gib deinen Zug ein (XYZ): ", activePlayer);
+    while (!validInput) {
+      scanf("%1zu%1zu%1zu", &x, &y, &z);
+      if (x >= 0 && x < BOARDSIZE && y >= 0 && y < BOARDSIZE && z >= 0 &&
+          z < BOARDSIZE && board[x][y][z] == EMPTY)
+        validInput = true;
+      else
+        printf("Ungülitge Eingabe. Bitte versuche es erneut (XYZ): ");
+    }
+    printf("X:%zu, Y:%zu, Z:%zu\n\n", x, y, z);
+
+    // Changing Player after Move logic
+    activePlayer++;
+    if (activePlayer == STONE_SIZE)
+      activePlayer = 1;
+  }
+
   return EXIT_SUCCESS;
 }
 
