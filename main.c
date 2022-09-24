@@ -35,12 +35,21 @@ int main() {
     }
     printf("X:%zu, Y:%zu, Z:%zu\n\n", x, y, z);
 
+    board[x][y][z] = activePlayer;
+    printBoard(board, PRINTMODE);
+    printf("\n\n\n\n");
     // Changing Player after Move logic
     activePlayer++;
     if (activePlayer == STONE_SIZE)
       activePlayer = 1;
   }
+  // Change Back to last Player who made a move
 
+  activePlayer++;
+  if (activePlayer == STONE_SIZE)
+    activePlayer = 1;
+
+  printf("Der Spieler %u hat Gewonnen\n", activePlayer);
   return EXIT_SUCCESS;
 }
 
@@ -93,7 +102,7 @@ enum stones evalWinner(enum stones board[BOARDSIZE][BOARDSIZE][BOARDSIZE]) {
   // check X rows
   for (size_t i = 0; i < BOARDSIZE; i++) {
     for (size_t j = 0; j < BOARDSIZE; j++) {
-      if (board[0][i][j] == board[1][i][j] &&
+      if (board[0][i][j] != EMPTY && board[0][i][j] == board[1][i][j] &&
           board[0][i][j] == board[2][i][j] && board[0][i][j] == board[3][i][j])
         return board[0][i][j];
     }
@@ -102,7 +111,7 @@ enum stones evalWinner(enum stones board[BOARDSIZE][BOARDSIZE][BOARDSIZE]) {
   // check Y rows
   for (size_t i = 0; i < BOARDSIZE; i++) {
     for (size_t j = 0; j < BOARDSIZE; j++) {
-      if (board[i][0][j] == board[i][1][j] &&
+      if (board[i][0][j] != EMPTY && board[i][0][j] == board[i][1][j] &&
           board[i][0][j] == board[i][2][j] && board[i][0][j] == board[i][3][j])
         return board[i][0][j];
     }
@@ -111,11 +120,19 @@ enum stones evalWinner(enum stones board[BOARDSIZE][BOARDSIZE][BOARDSIZE]) {
   // check Z rows
   for (size_t i = 0; i < BOARDSIZE; i++) {
     for (size_t j = 0; j < BOARDSIZE; j++) {
-      if (board[i][j][0] == board[i][j][1] &&
+      if (board[i][j][0] != EMPTY && board[i][j][0] == board[i][j][1] &&
           board[i][j][0] == board[i][j][2] && board[i][j][0] == board[i][j][3])
         return board[i][j][0];
     }
   }
+
+  // Check for trivial Diagonals
+  for (size_t i = 0; i < BOARDSIZE; i++) {
+    if (board[i][0][0] != EMPTY && board[i][0][0] == board[i][1][1] &&
+        board[i][0][0] == board[i][2][2] && board[i][0][0] == board[i][3][3])
+      return board[i][0][0];
+  }
+  // Check for non-trivial Diagonals
 
   // TODO: Check for Diagonals (both Types)
 
