@@ -30,8 +30,9 @@ int main() {
       if (x >= 0 && x < BOARDSIZE && y >= 0 && y < BOARDSIZE && z >= 0 &&
           z < BOARDSIZE && board[x][y][z] == EMPTY)
         validInput = true;
-      else
-        printf("Ungülitge Eingabe. Bitte versuche es erneut (XYZ): ");
+      else {
+        printf("\nUngülitge Eingabe. Bitte versuche es erneut (XYZ): ");
+      }
     }
     printf("X:%zu, Y:%zu, Z:%zu\n\n", x, y, z);
 
@@ -132,9 +133,37 @@ enum stones evalWinner(enum stones board[BOARDSIZE][BOARDSIZE][BOARDSIZE]) {
         board[i][0][0] == board[i][2][2] && board[i][0][0] == board[i][3][3])
       return board[i][0][0];
   }
-  // Check for non-trivial Diagonals
 
-  // TODO: Check for Diagonals (both Types)
+  for (size_t i = 0; i < BOARDSIZE; i++) {
+    if (board[0][i][0] != EMPTY && board[0][i][0] == board[1][i][1] &&
+        board[0][i][0] == board[2][i][2] && board[0][i][0] == board[3][i][3])
+      return board[0][i][0];
+  }
+
+  for (size_t i = 0; i < BOARDSIZE; i++) {
+    if (board[0][0][i] != EMPTY && board[0][0][i] == board[1][1][i] &&
+        board[0][0][i] == board[2][2][i] && board[0][0][i] == board[3][3][i])
+      return board[0][0][i];
+  }
+
+  // TODO Add other Diagonal directions (invert the top 3 for loops)
+
+  // Check for non trivial Diagonals
+  if (board[0][0][0] != EMPTY && board[0][0][0] == board[1][1][1] &&
+      board[0][0][0] == board[2][2][2] && board[0][0][0] == board[3][3][3])
+    return board[0][0][0]; // 000,111,222,333
+
+  if (board[3][0][0] != EMPTY && board[3][0][0] == board[2][1][1] &&
+      board[3][0][0] == board[1][2][2] && board[3][0][0] == board[0][3][3])
+    return board[3][0][0]; // 300,211,122,033
+
+  if (board[0][3][0] != EMPTY && board[0][3][0] == board[1][2][1] &&
+      board[0][3][0] == board[2][1][2] && board[0][3][0] == board[3][0][3])
+    return board[0][3][0]; // 030,121,212,303
+
+  if (board[3][3][0] != EMPTY && board[3][3][0] == board[2][2][1] &&
+      board[3][3][0] == board[1][1][2] && board[3][3][0] == board[0][0][3])
+    return board[3][3][0]; // 330,221,112,003
 
   return EMPTY;
 }
